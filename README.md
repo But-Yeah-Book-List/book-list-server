@@ -7,7 +7,6 @@
 The goal of this project is to implement a basic full stack application scaffold for a book list, which will render books from a PostgreSQL database.
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 Create an organization on GitHub
 Setup basic scaffolding of full stack application for client side and server side
 Connect your server repo to heroku
