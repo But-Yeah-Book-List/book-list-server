@@ -8,11 +8,15 @@ The goal of this project is to implement a basic full stack application scaffold
 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+Create an organization on GitHub
+Setup basic scaffolding of full stack application for client side and server side
+Connect your server repo to heroku
 
 ## Architecture
 - express
 - cors
 - pg
+- heroku
 
 ## Change Log
 <!-- Use this are to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
