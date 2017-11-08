@@ -20,7 +20,7 @@ app.use(cors());
 
 // API endpoints
 // TODO: REMOVE THIS TEST ROUTE LATER
-app.get('/test', (req, res) => res.send('hello boogs'));
+app.get('/test', (req, res) => res.send('hello hi!'));
 
 // Endpoint to retreive an array of book objects from database
 // TODO: ADD A $.GET TO BOOKS.JS TO LISTEN FOR THIS SEND(RESULTS.ROWS)
