@@ -46,7 +46,8 @@ function loadBooks() {
       client.query(
         `INSERT INTO books
         (title, author, isbn, image_url, description)
-        VALUES($1, $2, $3, $4, $5);`,
+        VALUES($1, $2, $3, $4, $5)
+        ON CONFLICT DO NOTHING;`,
         [ele.title, ele.author, ele.isbn, ele.image_url, ele.description]
       )
         .catch(console.error);
