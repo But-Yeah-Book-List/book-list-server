@@ -19,7 +19,7 @@ client.on('error', err => console.error(err));
 app.use(cors());
 
 // API endpoints
-// TODO: REMOVE THIS TEST ROUTE LATER
+// TODO: REMOVE THIS TEST ROUTE LATER. Auto deploy test
 app.get('/test', (req, res) => res.send('hello hi!'));
 
 // Endpoint to retreive an array of book objects from database
