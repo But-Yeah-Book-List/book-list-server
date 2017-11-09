@@ -30,11 +30,11 @@ app.get('/api/v1/books', (req, res) => {
     .catch(console.error);
 });
 
-app.get('/api/v1/books/:id', (res, req) => {
+app.get('/api/v1/books/:id', (req, res) => {
   client.query(`
     SELECT *
     FROM books
-    WHERE book_id='${req.params.id}';`)
+    WHERE book_id=${req.params.id};`)
     .then(results => res.send(results.rows))
     .catch(console.error);
 });
@@ -44,7 +44,7 @@ app.get('*', (req, res) => res.redirect(CLIENT_URL));
 client.query(`
   SELECT author FROM books;`)
   .then(results => {
-    if(results.rows.length < 1) loadBooks();
+    if(!results.rows.length) loadBooks();
   })
   .catch(loadDb);
 
