@@ -35,7 +35,12 @@ app.get('/api/v1/books', (req, res) => {
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
-loadDb();
+client.query(`
+  SELECT author FROM books;`)
+  .then(results => {
+    if(results.rows.length < 1) loadBooks();
+  })
+  .catch(loadDb);
 
 // Starting a UNIX-Socket for connections on this port
 app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
@@ -46,8 +51,7 @@ function loadBooks() {
       client.query(
         `INSERT INTO books
         (title, author, isbn, image_url, description)
-        VALUES($1, $2, $3, $4, $5)
-        ON CONFLICT (isbn) DO NOTHING;`,
+        VALUES($1, $2, $3, $4, $5);`,
         [ele.title, ele.author, ele.isbn, ele.image_url, ele.description]
       )
         .catch(console.error);
