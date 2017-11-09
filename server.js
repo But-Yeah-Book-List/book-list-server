@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const pg = require('pg');
 const fs = require('fs');
+const bodyParser = require('body-parser').urlencoded({extended: true});
 
 //Application Setup
 const app = express();
@@ -38,6 +39,21 @@ app.get('/api/v1/books/:id', (req, res) => {
     .then(results => res.send(results.rows))
     .catch(console.error);
 });
+
+app.post('/api/v1/books', bodyParser, (req, res) => {
+  let {title, author, isbn, image_url, description} = req.body;
+  client.query(`
+    INSERT INTO books
+    (title, author, isbn, image_url, description)
+    VALUES($1, $2, $3, $4, $5);`,
+    [title, author, isbn, image_url, description])
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+// app.get('/books/:id', (req, res) => {
+//   res.redirect(`${CLIENT_URL}api/v1/books/:${req.params.id}`);
+// });
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
