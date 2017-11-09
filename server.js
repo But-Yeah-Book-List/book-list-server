@@ -41,7 +41,12 @@ app.get('/api/v1/books', (req, res) => {
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
-loadDb();
+client.query(`
+  SELECT author FROM books;`)
+  .then(results => {
+    if(results.rows.length < 1) loadBooks();
+  })
+  .catch(loadDb);
 
 // Starting a UNIX-Socket for connections on this port
 app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
