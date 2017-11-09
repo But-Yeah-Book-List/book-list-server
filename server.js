@@ -20,18 +20,24 @@ client.on('error', err => console.error(err));
 app.use(cors());
 
 // API endpoints
-// TODO: REMOVE THIS TEST ROUTE LATER. Auto deploy test
-app.get('/test', (req, res) => res.send('hello hi!'));
 
 // Endpoint to retreive an array of book objects from database
-// TODO: ADD A $.GET TO BOOKS.JS TO LISTEN FOR THIS SEND(RESULTS.ROWS)
 app.get('/api/v1/books', (req, res) => {
   client.query(`
     SELECT book_id, title, author, image_url, isbn
     FROM books;`)
     .then(results => res.send(results.rows))
-    .catch(console.error)
+    .catch(console.error);
 });
+
+// app.get('/api/v1/books/:id', (res, req) => {
+//   client.query(`
+//     SELECT *
+//     FROM books
+//     WHERE book_id='${req.params.id}';`)
+//     .then(results => res.send(results.rows))
+//     .catch(console.error);
+// });
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
