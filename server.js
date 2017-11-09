@@ -51,10 +51,6 @@ app.post('/api/v1/books', bodyParser, (req, res) => {
     .catch(console.error);
 });
 
-// app.get('/books/:id', (req, res) => {
-//   res.redirect(`${CLIENT_URL}api/v1/books/:${req.params.id}`);
-// });
-
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 client.query(`
