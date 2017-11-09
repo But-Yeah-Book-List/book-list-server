@@ -30,14 +30,14 @@ app.get('/api/v1/books', (req, res) => {
     .catch(console.error);
 });
 
-// app.get('/api/v1/books/:id', (res, req) => {
-//   client.query(`
-//     SELECT *
-//     FROM books
-//     WHERE book_id='${req.params.id}';`)
-//     .then(results => res.send(results.rows))
-//     .catch(console.error);
-// });
+app.get('/api/v1/books/:id', (res, req) => {
+  client.query(`
+    SELECT *
+    FROM books
+    WHERE book_id='${req.params.id}';`)
+    .then(results => res.send(results.rows))
+    .catch(console.error);
+});
 
 app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
