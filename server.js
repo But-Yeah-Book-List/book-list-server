@@ -41,7 +41,6 @@ app.get('/api/v1/books/:id', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-  console.log(process.env.TOKEN, req.query.token, process.env.TOKEN === req.query.token);
   res.send(process.env.TOKEN === req.query.token);
 });
 
