@@ -11,6 +11,7 @@ const bodyParser = require('body-parser').urlencoded({extended: true});
 const app = express();
 const PORT = process.env.PORT;
 const CLIENT_URL = process.env.CLIENT_URL;
+const TOKEN = process.env.TOKEN;
 
 // Database Setup
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -20,9 +21,15 @@ client.on('error', err => console.error(err));
 // Application Middleware
 app.use(cors());
 
+client.query(`
+  SELECT author FROM books;`)
+  .then(results => {
+    if(!results.rows.length) loadBooks();
+  })
+  .catch(loadDb);
+
 // API endpoints
 
-// Endpoint to retreive an array of book objects from database
 app.get('/api/v1/books', (req, res) => {
   client.query(`
     SELECT book_id, title, author, image_url, isbn
@@ -37,21 +44,6 @@ app.get('/api/v1/books/:id', (req, res) => {
     FROM books
     WHERE book_id=${req.params.id};`)
     .then(results => res.send(results.rows))
-    .catch(console.error);
-});
-
-app.get('/admin', (req, res) => {
-  res.send(process.env.TOKEN === req.query.token);
-});
-
-app.post('/api/v1/books', bodyParser, (req, res) => {
-  let {title, author, isbn, image_url, description} = req.body;
-  client.query(`
-    INSERT INTO books
-    (title, author, isbn, image_url, description)
-    VALUES($1, $2, $3, $4, $5);`,
-    [title, author, isbn, image_url, description])
-    .then(() => res.sendStatus(201))
     .catch(console.error);
 });
 
@@ -75,18 +67,27 @@ app.delete('/api/v1/books/:id', (req, res) => {
     .catch(console.error);
 });
 
-app.get('*', (req, res) => res.redirect(CLIENT_URL));
+app.get('/admin', (req, res) => {
+  res.send(TOKEN === req.query.token);
+});
 
-client.query(`
-  SELECT author FROM books;`)
-  .then(results => {
-    if(!results.rows.length) loadBooks();
-  })
-  .catch(loadDb);
+app.post('/api/v1/books', bodyParser, (req, res) => {
+  let {title, author, isbn, image_url, description} = req.body;
+  client.query(`
+    INSERT INTO books
+    (title, author, isbn, image_url, description)
+    VALUES($1, $2, $3, $4, $5);`,
+    [title, author, isbn, image_url, description])
+    .then(() => res.sendStatus(201))
+    .catch(console.error);
+});
+
+app.get('*', (req, res) => res.redirect(CLIENT_URL));
 
 // Starting a UNIX-Socket for connections on this port
 app.listen(PORT, () => console.log(`listening on port: ${PORT}`));
 
+// Database Auto Loaders
 function loadBooks() {
   fs.readFile('data/books.json', (err, fd) => {
     JSON.parse(fd.toString()).forEach(ele => {
